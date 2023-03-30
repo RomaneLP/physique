@@ -1,3 +1,7 @@
+import numpy as np
+import scipy.integrate as integrate
+
+
 """ 
 We will represent the city by a list of Q lists of length H that represents the blocks. Each list representing the blocks will be filled
 with 0 if noone lives in that flat or 1 if someone does. This list will be named L.
@@ -29,6 +33,7 @@ def individual_utility(dens,m): # 0<m<1 asymmetry parameter
         return m + 2*(1-m)*(1-dens)
 
 
+densite= np.linspace(0,1,100)
 
 
 
@@ -40,8 +45,7 @@ def individual_utility(dens,m): # 0<m<1 asymmetry parameter
 
 
 
-
-"""def collective_utility(L): 
+def collective_utility(L): 
     dens=density(L)
     H= len(L[0])
     answer=0
@@ -64,7 +68,6 @@ def gain(L,alpha, start, end):
     return( delta_u+ alpha*(delta_U -delta_u) )
 
 def moving_probability(L,alpha,T, start, end):
-    import numpy as np
     G=gain(L,alpha, start, end)
     return (1/ (1 + np.exp(- G/T)))
 
@@ -73,8 +76,6 @@ def moving_probability(L,alpha,T, start, end):
 # PARTIE 2 - Calculating the distribution 
 
 def block_potential (dens,T,alpha): #f
-    import numpy as np
-    import scipy.integrate as integrate
     answer=0
     answer+= -T*dens*np.log(dens)- T*(1-dens)*np.log(1-dens)+ alpha*dens*indiv_utility(dens)
     answer+= integrate.quad(indiv_utility, 0, dens)
@@ -89,5 +90,4 @@ def F(L,T,alpha):   #potential F
     return answer
 
 def distribution(L,Z,T,alpha):
-    import numpy as np
-    return (np.exp(F(L,T,alpha)/T)/Z)"""
+    return (np.exp(F(L,T,alpha)/T)/Z)
