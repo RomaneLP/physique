@@ -1,7 +1,14 @@
 import numpy as np
 import scipy.integrate as integrate
+import matplotlib.pyplot as plt
+import scipy.optimize as opt
+from mpl_toolkits import mplot3d
 
-
+n=np.linspace(0,1,10)
+m=np.linspace(0,3,10)
+print(n)
+plt.plot(n,m)
+plt.show()
 """ 
 We will represent the city by a list of Q lists of length H that represents the blocks. Each list representing the blocks will be filled
 with 0 if noone lives in that flat or 1 if someone does. This list will be named L.
@@ -31,9 +38,18 @@ def individual_utility(dens,m): # 0<m<1 asymmetry parameter
          return 2*dens
     else :
         return m + 2*(1-m)*(1-dens)
+m=1/2     #par exemple
+u=[]
+density= np.linspace(0,1,100)
+for d in density:
+    u.append(individual_utility(d,m))
 
+plt.plot(density,u)
+plt.xlabel("density")
+plt.ylabel("u(density)")
+plt.title("Asymmetrically peaked individual utility as a function of block density for m=1/2")
+plt.show()
 
-densite= np.linspace(0,1,100)
 
 
 
@@ -88,6 +104,25 @@ def F(L,T,alpha):   #potential F
     for i in range (len(L)):
         answer+=H*block_potential(dens[i],T,alpha)
     return answer
+
+"""alpha= np.linspace(0,1,100)
+m= np.linspace(0,1,100)
+maxF= []
+for a in alpha:
+    for i in m :
+        maxF.append(opt.minimize(-F(L,T,alpha), 0, method = 'Nelder-Mead')) 
+
+fig = plt.figure()
+ 
+# syntax for 3-D projection
+ax = plt.axes(projection ='3d')
+
+# plotting
+ax.plot3D(m, alpha, maxF, 'green')
+ax.set_title('3D line plot geeks for geeks')
+plt.show()"""
+
+
 
 def distribution(L,Z,T,alpha):
     return (np.exp(F(L,T,alpha)/T)/Z)
